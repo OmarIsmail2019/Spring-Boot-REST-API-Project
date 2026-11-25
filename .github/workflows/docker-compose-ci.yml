@@ -12,10 +12,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: validate Docker Compose
               run: docker compose config
-              
+
             - name: Build Docker image
               run: docker compose build
