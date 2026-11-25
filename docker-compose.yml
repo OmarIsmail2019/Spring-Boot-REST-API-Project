@@ -1,21 +1,64 @@
 services:
+  api:
+    container_name: spring-api-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+    networks:
+      - backend
+
   db:
     container_name: postgres-spring-boot
-    image: postgres:latest
+    image: postgres:17
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      PGDATA: /data/postgres
+      POSTGRES_DB: postgres
     volumes:
-      - db:/data/postgres
+      - db:/var/lib/postgresql/data
     ports:
       - "5332:5432"
-    networks:
-      - db
     restart: unless-stopped
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL" , "pg_isready -U user -d postgres"]
+      interval: 10s
+      timeout: 15s
+      retries: 5  
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - backend
+    restart: unless-stopped    
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /Users/macbookpro/.docker/run/docker.sock:/var/run/docker.sock:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - backend
+    restart: unless-stopped        
 
 networks:
-  db:
+  backend:
     driver: bridge
+
 volumes:
   db:
