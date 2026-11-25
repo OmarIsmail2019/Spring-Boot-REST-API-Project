@@ -1,0 +1,22 @@
+name: Docker Compose CI
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'docker-compose.yml'    
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'docker-compose.yml'    
+jobs: 
+    validate-clone:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: validate Docker Compose
+              run: docker compose config
