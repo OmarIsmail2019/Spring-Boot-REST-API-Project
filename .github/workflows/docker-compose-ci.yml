@@ -16,3 +16,6 @@ jobs:
 
             - name: validate Docker Compose
               run: docker compose config
+              
+            - name: Build Docker image
+              run: docker compose build
