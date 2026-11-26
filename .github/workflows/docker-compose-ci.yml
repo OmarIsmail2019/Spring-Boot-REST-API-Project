@@ -1,72 +1,72 @@
-# name: Docker Compose CI
-
-# on:
-#     push:
-#         branches:
-#             - main   
-#     pull_request:
-#         branches:
-#             - main 
-# jobs: 
-#     validate-clone:
-#         runs-on: ubuntu-latest
-#         steps:
-#             - name: Checkout code
-#               uses: actions/checkout@v6
-
-#             - name: validate Docker Compose
-#               run: docker compose config
-#             - name: Login Docker Hub
-#               if: github.event_name == 'push'
-#               uses: docker/login-action@v3
-#               with:
-#                 username: ${{ secrets.DOCKERHUB_USERNAME }}
-#                 password: ${{ secrets.DOCKERHUB_TOKEN }}   
-
-#             - name: Build Docker Image
-#               run: |
-#                 docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-#                 docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
-#                 docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-#                 docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
-
-
-
 name: Docker Compose CI
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main   
+    pull_request:
+        branches:
+            - main 
+jobs: 
+    validate-clone:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+            - name: validate Docker Compose
+              run: docker compose config
+            - name: Login Docker Hub
+              if: github.event_name == 'push'
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}   
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+            - name: Build Docker Image
+              run: |
+                docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
+                docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
 
-      - name: Validate Docker Compose
-        run: docker compose config
 
-      - name: Build Docker Image
-        run: docker build -t spring-api:${{ github.sha }} .
 
-      - name: Login to Docker Hub
-        if: github.event_name == 'push'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+# name: Docker Compose CI
 
-      - name: Push Docker Image
-        if: github.event_name == 'push'
-        run: |
-          docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-          docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v6
+
+#       - name: Validate Docker Compose
+#         run: docker compose config
+
+#       - name: Build Docker Image
+#         run: docker build -t spring-api:${{ github.sha }} .
+
+#       - name: Login to Docker Hub
+#         if: github.event_name == 'push'
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#       - name: Push Docker Image
+#         if: github.event_name == 'push'
+#         run: |
+#           docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
+#           docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
+#           docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
+#           docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
