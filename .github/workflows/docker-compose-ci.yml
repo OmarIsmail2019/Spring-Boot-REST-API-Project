@@ -25,10 +25,10 @@ jobs:
 
             - name: Build Docker Image
               run: |
-                docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-                docker tag spring-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
-                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:latest
-                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring-api:${{ github.sha }}
+                docker tag spring_api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring_api:latest
+                docker tag spring_api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/spring_api:${{ github.sha }}
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring_api:latest
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/spring_api:${{ github.sha }}
 
 
 
